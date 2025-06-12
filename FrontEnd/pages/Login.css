@@ -1,0 +1,15 @@
+.login-container {
+  background: linear-gradient(to right, #141e30, #243b55);
+  padding: 20px;
+  min-height: 100vh;
+}
+
+.card {
+  border-radius: 15px;
+  background-color: #ffffff;
+}
+
+.card h2 {
+  font-weight: bold;
+  color: #333;
+}
