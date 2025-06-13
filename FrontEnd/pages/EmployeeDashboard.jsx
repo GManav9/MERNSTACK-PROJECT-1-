@@ -20,7 +20,9 @@ function EmployeeDashboard() {
     }
 
     axios
-      .get(`http://localhost:8888/employee-profile?email=${email}`)
+      .get(
+        `https://mernstack-project-1.onrender.com/employee-profile?email=${email}`
+      )
       .then((res) => {
         if (res.data.success) {
           setEmployee(res.data.employee);

@@ -11,7 +11,7 @@ function EmployeesList() {
 
   const fetchEmployees = () => {
     axios
-      .get("http://localhost:8888/all-employees")
+      .get("https://mernstack-project-1.onrender.com/all-employees")
       .then((res) => {
         if (res.data.success) {
           setEmployees(res.data.employees);
@@ -31,7 +31,7 @@ function EmployeesList() {
 
     try {
       const res = await axios.delete(
-        `http://localhost:8888/delete-employee/${id}`
+        `https://mernstack-project-1.onrender.com/delete-employee/${id}`
       );
       if (res.data.success) {
         setEmployees(employees.filter((emp) => emp._id !== id));

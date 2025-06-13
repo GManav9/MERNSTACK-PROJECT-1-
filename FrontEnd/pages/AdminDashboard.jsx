@@ -26,7 +26,9 @@ function AdminDashboard() {
     }
 
     axios
-      .get(`http://localhost:8888/dashboard?email=${emailFromState}`)
+      .get(
+        `https://mernstack-project-1.onrender.com/dashboard?email=${emailFromState}`
+      )
       .then((res) => {
         if (res.data.success && res.data.role.toLowerCase() === "admin") {
           setMessage(`Hello Admin - ${res.data.name}`);
@@ -63,7 +65,7 @@ function AdminDashboard() {
     }
 
     axios
-      .post("http://localhost:8888/add-manager", {
+      .post("https://mernstack-project-1.onrender.com/add-manager", {
         username,
         email,
         phone,

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 function AllManagers() {
   const [managers, setManagers] = useState([]);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
 
   useEffect(() => {
     fetchManagers();
@@ -12,7 +12,7 @@ function AllManagers() {
 
   const fetchManagers = () => {
     axios
-      .get("http://localhost:8888/all-managers")
+      .get("https://mernstack-project-1.onrender.com/all-managers")
       .then((res) => {
         if (res.data.success) {
           setManagers(res.data.managers);
@@ -27,22 +27,46 @@ function AllManagers() {
   };
 
   const handleDelete = (managerId) => {
-    if (!window.confirm("Are you sure you want to delete this manager?"))
-      return;
-
-    axios
-      .delete(`http://localhost:8888/delete-manager/${managerId}`)
-      .then((res) => {
-        if (res.data.success) {
-          setSuccess("Manager deleted successfully.");
-          fetchManagers();
-        } else {
-          setError("Failed to delete manager.");
-        }
-      })
-      .catch(() => {
-        setError("Error occurred while deleting manager.");
-      });
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to delete this manager?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#dc3545",
+      cancelButtonColor: "#6c757d",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(
+            `https://mernstack-project-1.onrender.com/delete-manager/${managerId}`
+          )
+          .then((res) => {
+            if (res.data.success) {
+              Swal.fire({
+                icon: "success",
+                title: "Deleted!",
+                text: "Manager deleted successfully.",
+                confirmButtonColor: "#198754",
+              });
+              fetchManagers();
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Failed!",
+                text: "Failed to delete manager.",
+              });
+            }
+          })
+          .catch(() => {
+            Swal.fire({
+              icon: "error",
+              title: "Error!",
+              text: "Error occurred while deleting manager.",
+            });
+          });
+      }
+    });
   };
 
   return (
@@ -53,11 +77,6 @@ function AllManagers() {
         {error && (
           <div className="alert alert-danger text-center fw-semibold">
             {error}
-          </div>
-        )}
-        {success && (
-          <div className="alert alert-success text-center fw-semibold">
-            {success}
           </div>
         )}
 

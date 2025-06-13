@@ -11,46 +11,48 @@ function Signup() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
 
-    axios
-      .post("http://localhost:8888/signup", {
-        name,
-        email,
-        password,
-        role: "admin",
-      })
-      .then((res) => {
-        if (res && res.status === 201) {
-          Swal.fire({
-            icon: "success",
-            title: "Registration Successful",
-            text: res.data.msg || "You have successfully registered!",
-            confirmButtonColor: "#007bff",
-            confirmButtonText: "Go to Login",
-          }).then(() => {
-            navigate("/login");
-          });
+    try {
+      const res = await axios.post(
+        "https://mernstack-project-1.onrender.com/signup",
+        {
+          name: name.trim(),
+          email: email.trim(),
+          password,
+          role: "admin", // Default signup as admin
         }
-      })
-      .catch((error) => {
-        if (error.response && error.response.status === 409) {
-          Swal.fire({
-            icon: "warning",
-            title: "Email Already Exists",
-            text: error.response.data.msg,
-            confirmButtonColor: "#ffc107",
-          });
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "Oops!",
-            text: "Something went wrong. Registration failed.",
-            confirmButtonColor: "#dc3545",
-          });
-        }
-      });
+      );
+
+      if (res && res.status === 201) {
+        Swal.fire({
+          icon: "success",
+          title: "Registration Successful",
+          text: res.data.msg || "You have successfully registered!",
+          confirmButtonColor: "#007bff",
+          confirmButtonText: "Go to Login",
+        }).then(() => {
+          navigate("/login");
+        });
+      }
+    } catch (error) {
+      if (error.response?.status === 409) {
+        Swal.fire({
+          icon: "warning",
+          title: "Email Already Exists",
+          text: error.response.data.msg || "This email is already registered.",
+          confirmButtonColor: "#ffc107",
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops!",
+          text: "Something went wrong. Registration failed.",
+          confirmButtonColor: "#dc3545",
+        });
+      }
+    }
   };
 
   return (
@@ -69,6 +71,7 @@ function Signup() {
               type="text"
               className="form-control"
               placeholder="Enter username"
+              value={name}
               onChange={(e) => setName(e.target.value)}
               required
             />
@@ -82,6 +85,7 @@ function Signup() {
               type="email"
               className="form-control"
               placeholder="Enter email"
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
@@ -95,6 +99,7 @@ function Signup() {
               type="password"
               className="form-control"
               placeholder="Enter password"
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />

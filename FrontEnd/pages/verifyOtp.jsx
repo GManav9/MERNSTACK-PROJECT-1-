@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import "./VerifyOtp.css";
 
 function VerifyOtp() {
@@ -9,7 +10,6 @@ function VerifyOtp() {
   const { email, role } = location.state || {};
 
   const [otp, setOtp] = useState(new Array(6).fill(""));
-  const [message, setMessage] = useState("");
   const inputRefs = useRef([]);
 
   const handleChange = (element, index) => {
@@ -22,7 +22,9 @@ function VerifyOtp() {
       if (index < 5) inputRefs.current[index + 1].focus();
     } else if (value.length > 1) {
       const values = value.split("").slice(0, 6);
-      for (let i = 0; i < values.length; i++) newOtp[i] = values[i];
+      for (let i = 0; i < values.length; i++) {
+        newOtp[i] = values[i];
+      }
       setOtp(newOtp);
       values.length < 6
         ? inputRefs.current[values.length].focus()
@@ -56,20 +58,39 @@ function VerifyOtp() {
     const finalOtp = otp.join("");
 
     try {
-      const res = await axios.post("http://localhost:8888/verify-otp", {
-        email,
-        role,
-        otp: finalOtp,
-      });
+      const res = await axios.post(
+        "https://mernstack-project-1.onrender.com/verify-otp",
+        {
+          email,
+          role,
+          otp: finalOtp,
+        }
+      );
 
       if (res.data.success) {
-        setMessage("OTP Verified");
-        navigate("/reset-password", { state: { email, role } });
+        Swal.fire({
+          icon: "success",
+          title: "OTP Verified!",
+          text: "Proceed to reset your password.",
+          confirmButtonColor: "#28a745",
+        }).then(() => {
+          navigate("/reset-password", { state: { email, role } });
+        });
       } else {
-        setMessage(res.data.message || "OTP verification failed");
+        Swal.fire({
+          icon: "error",
+          title: "Verification Failed",
+          text: res.data.message || "Incorrect or expired OTP.",
+          confirmButtonColor: "#dc3545",
+        });
       }
     } catch (err) {
-      setMessage("Something went wrong");
+      Swal.fire({
+        icon: "error",
+        title: "Server Error",
+        text: "Something went wrong. Please try again later.",
+        confirmButtonColor: "#dc3545",
+      });
     }
   };
 
@@ -81,7 +102,7 @@ function VerifyOtp() {
       >
         <h2 className="text-center mb-4">Verify OTP</h2>
         <form onSubmit={handleVerifyOtp}>
-          <div className="otp-container mb-4">
+          <div className="otp-container mb-4 d-flex justify-content-between">
             {otp.map((digit, index) => (
               <input
                 key={index}
@@ -103,7 +124,6 @@ function VerifyOtp() {
             </button>
           </div>
         </form>
-        {message && <p className="mt-3 text-danger text-center">{message}</p>}
       </div>
     </div>
   );

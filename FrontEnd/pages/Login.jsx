@@ -17,19 +17,22 @@ function Login() {
     e.preventDefault();
 
     try {
-      const res = await axios.post("http://localhost:8888/login", {
-        email: emailOrUsername,
-        password,
-        role,
-      });
+      const res = await axios.post(
+        "https://mernstack-project-1.onrender.com/login",
+        {
+          email: emailOrUsername,
+          password,
+          role,
+        }
+      );
 
       if (res.data.success) {
         setError("");
         const userEmail = res.data.user?.email || emailOrUsername;
 
-        setShowToast(true); // Show toast
+        setShowToast(true);
         setTimeout(() => {
-          setShowToast(false); // Hide after 3s
+          setShowToast(false);
 
           switch (res.data.role) {
             case "admin":
@@ -124,7 +127,7 @@ function Login() {
         </form>
       </div>
 
-      {/* 🟢 Custom Toast (Top Center) */}
+      {/* ✅ Custom Toast (Top Center) */}
       {showToast && (
         <div
           className="custom-toast animate__animated animate__fadeInDown"

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
-import Swal from "sweetalert2"; // ✅ Import SweetAlert2
+import Swal from "sweetalert2";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function ResetPassword() {
@@ -23,17 +23,19 @@ function ResetPassword() {
     }
 
     try {
-      const res = await axios.post("http://localhost:8888/reset-password", {
-        email,
-        role,
-        password,
-      });
+      const res = await axios.post(
+        "https://mernstack-project-1.onrender.com/reset-password",
+        {
+          email,
+          role,
+          password,
+        }
+      );
 
       if (res.data.success) {
         setMessage("Password reset successfully");
         setError("");
 
-        // ✅ Show SweetAlert2 success popup
         Swal.fire({
           icon: "success",
           title: "Success!",

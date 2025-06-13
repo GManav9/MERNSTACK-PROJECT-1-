@@ -16,10 +16,13 @@ function ForgotPassword() {
 
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:8888/forgot-password", {
-        email,
-        role,
-      });
+      const res = await axios.post(
+        "https://mernstack-project-1.onrender.com/forgot-password",
+        {
+          email,
+          role,
+        }
+      );
 
       if (res.data.success) {
         setMessage("OTP sent to your email");

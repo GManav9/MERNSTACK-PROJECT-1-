@@ -17,7 +17,7 @@ function ManagerDashboard() {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const email = location.state?.email; // ✅ Email from route state
+  const email = location.state?.email;
 
   useEffect(() => {
     if (!email) {
@@ -26,7 +26,9 @@ function ManagerDashboard() {
     }
 
     axios
-      .get(`http://localhost:8888/manager-dashboard?email=${email}`)
+      .get(
+        `https://mernstack-project-1.onrender.com/manager-dashboard?email=${email}`
+      )
       .then((res) => {
         if (res.data.success) {
           setManager(res.data.manager);
@@ -54,7 +56,7 @@ function ManagerDashboard() {
       };
 
       const res = await axios.post(
-        "http://localhost:8888/add-employee",
+        "https://mernstack-project-1.onrender.com/add-employee",
         payload
       );
       setMessage(res.data.msg || "Employee added successfully");
