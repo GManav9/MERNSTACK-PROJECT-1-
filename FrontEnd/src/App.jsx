@@ -10,7 +10,7 @@ import EmployeeDashboard from "../pages/EmployeeDashboard";
 import AdminDashboard from "../pages/AdminDashboard";
 import EmployeesList from "../pages/EmployeeList";
 import ForgotPassword from "../pages/ForgotPassword";
-import VerifyOtp from "../pages/VerifyOtp";
+import VerifyOtp from "../pages/verifyOtp";
 import ResetPassword from "../pages/ResetPassword";
 
 function App() {
